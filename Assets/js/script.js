@@ -17,6 +17,7 @@ var timeBlockArray = [];
 var dayStart = 9;
 var dayEnd = 17;
 
+// displays current date at top
 var currentDay = function() {
     var today = moment().format("dddd, MMMM Do");
     console.log(today);
@@ -24,19 +25,29 @@ var currentDay = function() {
 }
 
 // TODO createTimeBlocks function
-/*
-    function called at bottom to dynamically create blocks
-        until load function created
-    use loop
-*/
+/*      function called at bottom to dynamically create blocks
+            until load function created
+        // use loop
+        formatting */
+// initializes timeBlocks on load
 var createTimeBlocks = function() {
-    for (i = dayStart, i < dayEnd, i++) {
-        // create div.row
-        // create p.hour with text i"AM" or if i > 12 then (i - 12)"PM"
-        // create p.time-block pull text from array with index i - dayStart
-        // create button.saveBtn
-        // append p's and button to div.row
-        // append div.row to div. container
+    for (i = dayStart; i <= dayEnd; i++) {
+        // creates elements
+        var rowEl = $("<div>").addClass("row align-items-start");
+        var hourEl = $("<time>").addClass("hour col-1");
+        var timeBlockEl = $("<p>").addClass("time-block col-10 past p-4");
+        var saveBtnEl = $("<button>").addClass("saveBtn col-1");
+        var iconEl = $("<i>").addClass("fa-solid fa-floppy-disk border");
+        // fills in elements with text
+        if (i <= 12) {
+            hourEl.text(i + "AM");
+        } else {
+            hourEl.text((i - 12) + "PM");
+        }
+        // appends new elements
+        saveBtnEl.append(iconEl);
+        rowEl.append(hourEl, timeBlockEl, saveBtnEl);
+        $(".container").append(rowEl);
     }
 }
 
@@ -56,6 +67,26 @@ var createTimeBlocks = function() {
     on click turns timeBlock into text-area
     on blur turn back
 */
+// event text was clicked change to editable text area
+$(".container").on("click", "p", function() {
+    // get current text
+    var text = $(this).text().trim();
+    // replace p with textarea
+    var textInput = $("<textarea>").addClass("form-control col-10 p-4").val(text);
+    $(this).replaceWith(textInput);
+    // focus text area
+    textInput.trigger("focus");
+});
+// text area unfocused
+$(".container").on("blur", "textarea", function() {
+    // get current value of text
+    var text = $(this).val();
+    // recreate p
+    var eventP = $("<p>").addClass("time-block col-10 p-4").text(text);
+    // replace textarea with p
+    $(this).replaceWith(eventP);
+});
+
 
 // TODO eventChecker on saveBtn click
 /*
