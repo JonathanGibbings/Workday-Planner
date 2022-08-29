@@ -1,6 +1,6 @@
 // TODO features
 /*
-    top displays current day
+    //top displays current day
     hour long time blocks from 9-5
     time blocks are color coded for past/pres/fut
     when time block clicked can enter event
@@ -13,19 +13,32 @@
     create array of objects to hold information
     each object only needs two keys time and text
 */
+var timeBlockArray = [];
+var dayStart = 9;
+var dayEnd = 17;
 
-// TODO currentDay function
-/*
-    displays current day at top of page
-    call at bottom so every time page is loaded it refreshes
-    use <p> id=currentDay
-*/
+var currentDay = function() {
+    var today = moment().format("dddd, MMMM Do");
+    console.log(today);
+    $("#currentDay").text(today);
+}
 
 // TODO createTimeBlocks function
 /*
     function called at bottom to dynamically create blocks
+        until load function created
     use loop
 */
+var createTimeBlocks = function() {
+    for (i = dayStart, i < dayEnd, i++) {
+        // create div.row
+        // create p.hour with text i"AM" or if i > 12 then (i - 12)"PM"
+        // create p.time-block pull text from array with index i - dayStart
+        // create button.saveBtn
+        // append p's and button to div.row
+        // append div.row to div. container
+    }
+}
 
 // TODO timeCheck function
 /*
@@ -53,4 +66,10 @@
 // TODO loadSchedule function
 /*
     call at bottom so runs on start up
+    if array empty return false
+    else call createTimeBlocks
 */
+
+// functions called on page load
+createTimeBlocks();
+currentDay();
