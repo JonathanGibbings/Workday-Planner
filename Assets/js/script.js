@@ -34,9 +34,9 @@ var createTimeBlocks = function() {
         var iconEl = $("<i>").addClass("fa-solid fa-floppy-disk border");
         // fills in elements with text
         if (i <= 12) {
-            hourEl.text(i + "AM");
+            hourEl.text(i + " AM");
         } else {
-            hourEl.text((i - 12) + "PM");
+            hourEl.text((i - 12) + " PM");
         }
         // appends new elements
         saveBtnEl.append(iconEl);
@@ -57,11 +57,18 @@ var createTimeBlocks = function() {
 */
 // checks time status of events
 var timeCheck = function(eventEl) {
-    // get hour from row
-    var hour = $(eventEl).find("time").text().trim();
-    if (moment().startOf("hour").isAfter(hour)) {
+    // get hour from row and add 12 if PM
+    var hour = $(eventEl).find("time").text().trim().split(" ");
+    hour[0] = parseInt(hour[0]);
+    if (hour[1] === "PM") {
+        hour[0] += 12;
+    }
+    // get current hour
+    var currentHour = parseInt(moment().format("H"));
+    // compare hour and current hour to get past/pres/fut and add class to event <p>
+    if (hour[0] < currentHour) {
         $(eventEl).find("p").addClass("past");
-    } else if (moment().startOf("hour").isSame(hour)) {
+    } else if (hour[0] === currentHour) {
         $(eventEl).find("p").addClass("present");
     } else {
         $(eventEl).find("p").addClass("future");
@@ -70,13 +77,14 @@ var timeCheck = function(eventEl) {
 }
 
 // calls timeCheck every 30 mins
-setInterval(function() {
+// setInterval(function() {
+var testFunc =  function() {
     $(".row").each(function(index, el) {
         console.log("timeCheck called")
         timeCheck(el);
     });
-}, 5000);
-// (1000 * 60) * 30);
+}
+// }, (1000 * 60) * 30);
 
 
 
@@ -117,3 +125,4 @@ $(".container").on("blur", "textarea", function() {
 // functions called on page load
 createTimeBlocks();
 currentDay();
+testFunc();
