@@ -11,11 +11,18 @@ var timeBlockArray = [];
 var dayStart = 9;
 var dayEnd = 17;
 
-// displays current date at top
-var currentDay = function() {
+// displays current date at top and initializes array
+var initial = function() {
     var today = moment().format("dddd, MMMM Do");
     console.log(today);
     $("#currentDay").text(today);
+    for (var i = dayStart; i <= dayEnd; i++) {
+        timeBlockArray.push({
+            time: i;
+            text: "";
+        })
+
+    }
 }
 
 // TODO createTimeBlocks function
@@ -30,8 +37,8 @@ var createTimeBlocks = function() {
         var rowEl = $("<div>").addClass("row align-items-start");
         var hourEl = $("<time>").addClass("hour col-1");
         var timeBlockEl = $("<p>").addClass("time-block col-10 past p-4");
-        var saveBtnEl = $("<button>").addClass("saveBtn col-1");
-        var iconEl = $("<i>").addClass("fa-solid fa-floppy-disk border");
+        var saveBtnEl = $("<button>").addClass("saveBtn col-1 p-3");
+        var iconEl = $("<i>").addClass("fas fa-save border p-1");
         // fills in elements with text
         if (i <= 12) {
             hourEl.text(i + " AM");
@@ -56,33 +63,37 @@ var createTimeBlocks = function() {
         hour...setInterval would be called at bottom
 */
 // checks time status of events
-var timeCheck = function(eventEl) {
-    // get hour from row and add 12 if PM
-    var hour = $(eventEl).find("time").text().trim().split(" ");
-    hour[0] = parseInt(hour[0]);
-    if (hour[1] === "PM") {
-        hour[0] += 12;
-    }
-    // get current hour
-    var currentHour = parseInt(moment().format("H"));
-    // compare hour and current hour to get past/pres/fut and add class to event <p>
-    if (hour[0] < currentHour) {
-        $(eventEl).find("p").addClass("past");
-    } else if (hour[0] === currentHour) {
-        $(eventEl).find("p").addClass("present");
-    } else if (hour[0] > currentHour) {
-        $(eventEl).find("p").addClass("future");
-    }
+var timeCheck = function() {
+    // for each row
+    $(".row").each(function(eventEl){
+        // get hour from row and add 12 if PM
+        var hour = $(eventEl).find("time").text().trim().split(" ");
+        hour[0] = parseInt(hour[0]);
+        if (hour[1] === "PM") {
+            hour[0] += 12;
+        }
+        // get current hour
+        var currentHour = parseInt(moment().format("H"));
+        // compare hour and current hour to get past/pres/fut and add class to event <p>
+        if (hour[0] < currentHour) {
+            $(eventEl).find("p").addClass("past");
+        } else if (hour[0] === currentHour) {
+            $(eventEl).find("p").addClass("present");
+        } else if (hour[0] > currentHour) {
+            $(eventEl).find("p").addClass("future");
+        }
+    });
 }
 
 // calls timeCheck every 30 mins
 setInterval(function() {
-    $(".row").each(function(index, el) {
+    $(".row").each(function(el) {
         console.log("timeCheck called")
         timeCheck(el);
     });
 }, (1000 * 60) * 30);
 
+setInterval(timeCheck(), (1000 * 60) * 60);
 
 
 // event text was clicked change to editable text area
@@ -111,6 +122,12 @@ $(".container").on("blur", "textarea", function() {
     on click saves ONLY that event
     index = hour - 9
 */
+$(".saveBtn").on("click", function() {
+    timeBlockArray.push({
+        time: "",
+        text: ""
+    })
+})
 
 // TODO loadSchedule function
 /*
@@ -121,4 +138,4 @@ $(".container").on("blur", "textarea", function() {
 
 // functions called on page load
 createTimeBlocks();
-currentDay();
+initial();
