@@ -7,12 +7,6 @@
     when save button clicked content saved in local
     when page refreshed load from local
 */
-
-// TODO timeBlockArray
-/*
-    create array of objects to hold information
-    each object only needs two keys time and text
-*/
 var timeBlockArray = [];
 var dayStart = 9;
 var dayEnd = 17;
@@ -61,12 +55,31 @@ var createTimeBlocks = function() {
         hour use that else use an hour so it always checks on the
         hour...setInterval would be called at bottom
 */
+// checks time status of events
+var timeCheck = function(eventEl) {
+    // get hour from row
+    var hour = $(eventEl).find("time").text().trim();
+    if (moment().startOf("hour").isAfter(hour)) {
+        $(eventEl).find("p").addClass("past");
+    } else if (moment().startOf("hour").isSame(hour)) {
+        $(eventEl).find("p").addClass("present");
+    } else {
+        $(eventEl).find("p").addClass("future");
+    }
 
-// TODO eventChecker on timeBlock click
-/*
-    on click turns timeBlock into text-area
-    on blur turn back
-*/
+}
+
+// calls timeCheck every 30 mins
+setInterval(function() {
+    $(".row").each(function(index, el) {
+        console.log("timeCheck called")
+        timeCheck(el);
+    });
+}, 5000);
+// (1000 * 60) * 30);
+
+
+
 // event text was clicked change to editable text area
 $(".container").on("click", "p", function() {
     // get current text
