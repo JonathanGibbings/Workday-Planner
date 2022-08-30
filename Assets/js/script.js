@@ -1,9 +1,9 @@
 // TODO features
 /*
     //top displays current day
-    hour long time blocks from 9-5
-    time blocks are color coded for past/pres/fut
-    when time block clicked can enter event
+    // hour long time blocks from 9-5
+    // time blocks are color coded for past/pres/fut
+    // when time block clicked can enter event
     when save button clicked content saved in local
     when page refreshed load from local
 */
@@ -70,21 +70,18 @@ var timeCheck = function(eventEl) {
         $(eventEl).find("p").addClass("past");
     } else if (hour[0] === currentHour) {
         $(eventEl).find("p").addClass("present");
-    } else {
+    } else if (hour[0] > currentHour) {
         $(eventEl).find("p").addClass("future");
     }
-
 }
 
 // calls timeCheck every 30 mins
-// setInterval(function() {
-var testFunc =  function() {
+setInterval(function() {
     $(".row").each(function(index, el) {
         console.log("timeCheck called")
         timeCheck(el);
     });
-}
-// }, (1000 * 60) * 30);
+}, (1000 * 60) * 30);
 
 
 
@@ -125,4 +122,3 @@ $(".container").on("blur", "textarea", function() {
 // functions called on page load
 createTimeBlocks();
 currentDay();
-testFunc();
