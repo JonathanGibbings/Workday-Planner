@@ -57,7 +57,9 @@ var timeCheck = function() {
         var hour = $(eventEl).find("time").text().trim().split(" ");
         hour[0] = parseInt(hour[0]);
         if (hour[1] === "PM") {
-            hour[0] += 12;
+            if(hour[0] != 12) {
+                hour[0] += 12;
+            }
         }
         // get current hour
         var currentHour = parseInt(moment().format("H"));
@@ -99,8 +101,20 @@ $(".container").on("blur", "textarea", function() {
     on click saves ONLY that event
     index = hour - 9
 */
-$(".container .saveBtn").on("click", ".saveBtn", function() {
-    console.log("saveBtn click");
+$(".container").on("click", "button", function() {
+    // gets time and text from sibling elements
+    var hour = $(this).siblings(".hour").text().trim().split(" ");
+    var eventText = $(this).siblings(".time-block").text().trim();
+    hour[0] = parseInt(hour[0]);
+    // change time to 24 hr
+    if (hour[1] === "PM") {
+        if(hour[0] != 12) {
+            hour[0] += 12;
+        }
+    }
+    // puts text into array getting index from time then saves array
+    timeBlockArray[hour[0] - timeBlockArray.length].text = eventText;
+    localStorage.setItem("schedule", JSON.stringify(timeBlockArray));
 })
 
 // pulls form local storage and if empty populates empty array
