@@ -1,12 +1,3 @@
-// TODO features
-/*
-    //top displays current day
-    // hour long time blocks from 9-5
-    // time blocks are color coded for past/pres/fut
-    // when time block clicked can enter event
-    when save button clicked content saved in local
-    when page refreshed load from local
-*/
 var timeBlockArray = [];
 var dayStart = 9;
 var dayEnd = 17;
@@ -18,20 +9,15 @@ var currentDay = function() {
     $("#currentDay").text(today);
 }
 
-// TODO createTimeBlocks function
-/*      function called at bottom to dynamically create blocks
-            until load function created
-        // use loop
-        formatting */
-// initializes timeBlocks on load
+// initializes timeBlocks on page
 var createTimeBlocks = function() {
     for (i = 0; i < timeBlockArray.length; i++) {
         // creates elements
         var rowEl = $("<div>").addClass("row align-items-start");
         var hourEl = $("<time>").addClass("hour col-1");
-        var timeBlockEl = $("<p>").addClass("time-block col-10 past p-4");
+        var timeBlockEl = $("<p>").addClass("time-block col-10 p-4");
         var saveBtnEl = $("<button>").addClass("saveBtn col-1 p-3");
-        var iconEl = $("<i>").addClass("fas fa-save p-1");
+        var iconEl = $("<i>").addClass("fas fa-save p-2");
         // fills in elements with text
         if (timeBlockArray[i].time < 12) {
             hourEl.text(timeBlockArray[i].time + " AM");
@@ -88,6 +74,9 @@ $(".container").on("click", "p", function() {
 $(".container").on("blur", "textarea", function() {
     // get current value of text
     var text = $(this).val();
+    if (!text) {
+        text = " ";
+    }
     // recreate p
     var eventP = $("<p>").addClass("time-block col-10 p-4").text(text);
     // replace textarea with p
@@ -95,12 +84,6 @@ $(".container").on("blur", "textarea", function() {
     timeCheck();
 });
 
-
-// TODO eventChecker on saveBtn click
-/*
-    on click saves ONLY that event
-    index = hour - 9
-*/
 $(".container").on("click", "button", function() {
     // gets time and text from sibling elements
     var hour = $(this).siblings(".hour").text().trim().split(" ");
